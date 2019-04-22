@@ -58,6 +58,8 @@ f = frequency(x, X);
 
 %% 3
 
+figure('Name', 'Histogram', 'Position', [500 100 900 600]);
+
 bar(X, [pX' f'], 'grouped');
 xlabel('$x$');
 ylabel('$p(x)$');
@@ -65,4 +67,4 @@ legend('$p_X$', '$f$');
 
 %% clearvars
 
-clearvars -except C pX Q N x f;
+clearvars -except X C pX Q N x f;

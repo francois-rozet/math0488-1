@@ -42,7 +42,7 @@ for i = 2:t
 end
 pi_t_a = pi_a(end, :);
 
-figure('Name', 'pi_a');
+figure('Name', 'pi_a', 'Position', [500 100 900 600]);
 plot((1:t)' - 1, pi_a);
 xlabel('$t$');
 ylabel('$\pi_t$');
@@ -56,7 +56,7 @@ for i = 2:t
 end
 pi_t_b = pi_b(end, :);
 
-figure('Name', 'pi_b');
+figure('Name', 'pi_b', 'Position', [1000 100 900 600]);
 plot((1:t)' - 1, pi_b);
 xlabel('$t$');
 ylabel('$\pi_t$');
@@ -72,7 +72,7 @@ pi_inf = mean(Q^1e3);
 
 %% 4
 
-T = 2 .^ (1:12)';
+T = 2 .^ (1:16)';
 l = length(T);
 seq2 = cell(l, 1);
 f = zeros(l, m);
@@ -81,11 +81,11 @@ for i = 1:length(T)
     f(i, :) = frequency(seq2{i}, 1:m);
 end
 
-figure('Name', 'freq');
+figure('Name', 'freq', 'Position', [1500 100 900 600]);
 bar(categorical(T), f, 'stacked');
 xlabel('$T$');
 ylabel('$f_x$');
-legend(leg);
+legend(leg, 'Location', 'BestOutside');
 
 %% clearvars
 
