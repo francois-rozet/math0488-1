@@ -1,19 +1,14 @@
 # Imports
 
 import numpy as np
-import csv
-
-import matplotlib.pyplot as plt
-import time
-import sys
-
-# Settings
-
-np.set_printoptions(threshold = sys.maxsize)
+import copy
 
 # Functions
 
 def fun(x, beta):
+	if x < 0:
+		return 1
+
 	return np.exp(-beta * x)
 
 def dist(a, b):
@@ -27,96 +22,81 @@ def length(cities, path):
 
 	return l
 
-def var_length(cities, path, i):
-	j = np.mod(i + 1, len(path))
+def var_length(cities, path, n, i, j):
 	var = 0
-	var -= dist(cities[path[i - 2]], cities[path[i - 1]])
-	var -= dist(cities[path[i]], cities[path[j]])
-	var += dist(cities[path[i - 2]], cities[path[i]])
+
+	if (j == n - 1) and (i == 0):
+		i, j = j, i
+
+	var -= dist(cities[path[i - 1]], cities[path[i]])
+	var -= dist(cities[path[j]], cities[path[(j + 1) % n]])
+
 	var += dist(cities[path[i - 1]], cities[path[j]])
+	var += dist(cities[path[i]], cities[path[(j + 1) % n]])
+
+	if j != (i + 1) % n:
+		var -= dist(cities[path[i]], cities[path[i + 1]])
+		var -= dist(cities[path[j - 1]], cities[path[j]])
+
+		var += dist(cities[path[j]], cities[path[i + 1]])
+		var += dist(cities[path[j - 1]], cities[path[i]])
+
 	return var
 
-def Q(cities, path, interv, beta):
-	return [fun(var_length(cities, path, i), beta) for i in interv]
+# Read
 
-def pick(q):
-	r = np.random.rand() * sum(q)
+exec(open('./cities.py').read())
 
-	for i in range(0, len(q)):
-		r -= q[i]
-		if r <= 0:
-			return i
+x = list()
+with open('resources/txt/x_best.txt', 'r') as f:
+	for y in f:
+		x.append(int(y))
 
-	return len(q)
+# Metropolis-Hastings
 
+## Parameters
 
-# Computations
+m = 1e6
+
+beta = 10
+d_beta = 50 / m
 
 ## Initialization
 
-cities = list()
-
-with open('resources/csv/belgium-cities.csv', 'r') as f:
-	belgium = csv.reader(f)
-	for city in belgium:
-		cities.append((float(city[1]), float(city[2])))
-
-## Hastings
-
 n = len(cities)
-m = 1000000
+l = length(cities, x)
 
-beta = 0.02;
-beta_max = 0.05;
+x_min = copy.copy(x)
+l_min = l
+l_best = l
 
-d_beta = (beta_max - beta) / m;
+## Computations
 
-start = time.time()
+print("Current best : %.6f km" %l_best)
 
-x = list(range(0, n))
-lx = length(cities, x)
-qx = Q(cities, x, range(0, n), beta)
-sx = sum(qx)
+while m > 0:
+	m -= 1
+	beta += d_beta
 
-x_min = x
-l_min = lx
-l = [lx]
+	i = np.random.randint(n - 1)
+	j = np.random.randint(i + 1, n)
 
-while len(l) < m:
-	i = pick(qx)
+	delta_l = var_length(cities, x, n, i, j)
 
-	delta_l = var_length(cities, x, i)
-
-	ly = lx + delta_l
-
-	interv = list(np.mod(range(i - 2, i + 3), n))
-
-	x[i], x[i - 1] = x[i - 1], x[i] # x -> y
-
-	_qx = [qx[j] for j in interv]
-	_qy = Q(cities, x, interv, beta) # _qy = [qy[j] for j in interv]
-	sy = sx - sum(_qx) + sum(_qy)
-	
-	alpha = fun(-delta_l, beta) * sx / sy
+	alpha = fun(delta_l, beta)
 
 	if (alpha >= 1) or (np.random.rand() < alpha):
-		lx = ly
-		for j in interv:
-			qx[j] = _qy[np.mod(j - i + 2, n)]
-		sx = sy
-	else:
-		x[i], x[i - 1] = x[i - 1], x[i] # y -> x
+		x[i], x[j] = x[j], x[i]
+		l += delta_l
 
-	if lx < l_min:
-		x_min = x
-		l_min = lx
+		if l < l_min:
+			x_min = copy.copy(x)
+			l_min = l
 
-	beta += d_beta
-	l.append(lx)
+# Write
 
-end = time.time()
-
-print(end - start)
-
-plt.plot(l)
-plt.show()
+if l_min < l_best:
+	print("New best : %.6f km" %l_min)
+	with open('resources/txt/x_temp.txt', 'w') as f:
+		while len(x_min) > 0:
+			f.write(str(x_min.pop(0)) + '\n')
