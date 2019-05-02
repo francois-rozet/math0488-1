@@ -5,7 +5,6 @@ Projet réalisé sous la direction de **Pierre Geurts** dans le cadre du cours *
 ## Langages
 
 * Les calculs ont été réalisés à l'aide du langage [MATLAB](https://mathworks.com/products/matlab.html) dans sa version **R2019a** et plusieurs de ses *toolboxs*.
-* La résolution du problème d'optimisation combinatoire a été réalisée à l'aide du langage [Python](https://www.python.org/) dans sa version **3.7**.
 * Le rapport a été rédigé en [LaTeX](https://www.latex-project.org/).
 
 ## Auteurs
