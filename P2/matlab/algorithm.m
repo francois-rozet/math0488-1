@@ -3,7 +3,7 @@
 name = 'belgium';
 file = ['products/mat/' name '.mat'];
 
-if isfile(file)
+if exist(file, 'file') == 2
     load(file);
 else
     initialize;
@@ -19,26 +19,28 @@ end
 % Parameters
 
 m = 1e6;
+c = min(1e6, m);
 beta = 10;
-rel_beta = beta * n / l;
+beta_rel = beta * n / l;
 
 % Algorithm
 
-s = l;
 k = 1;
-
-I = randi([1 n], [m 2]);
 
 tic
 while k < m
-    i = I(k, 1);
-    j = I(k, 2);
+    if mod(k - 1, c) == 0
+        I = randi([1 n], [c 2]);
+    end
+    
+    i = I(mod(k - 1, c) + 1, 1);
+    j = I(mod(k - 1, c) + 1, 2);
         
     delta = delta_f(n, D, x, i, j);
     
-    alpha = P(rel_beta, delta);
+    a = alpha(beta_rel, delta);
     
-    if alpha >= 1 || rand() < alpha
+    if a >= 1 || rand() < a
         l = l + delta;
         temp = x(i);
         x(i) = x(j);
@@ -50,7 +52,6 @@ while k < m
         end
     end
     
-    s = s + l;
     k = k + 1;
 end
 toc
@@ -65,11 +66,11 @@ disp(['Best length in ' num2str(m) ' iterations : ' num2str(l_min)]);
 
 %% Functions
 
-function p = P(beta, x)
+function a = alpha(beta, x)
     if x < 0
-        p = 1;
+        a = 1;
     else
-        p = exp(-beta * x);
+        a = exp(-beta * x);
     end
 end
 

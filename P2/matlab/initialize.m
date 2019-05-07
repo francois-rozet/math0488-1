@@ -50,10 +50,10 @@ x_nna = x_nna_min;
 
 %% Save
 
-if ~isfolder('products')
+if ~exist('products', 'dir')
     mkdir products;
     mkdir products/mat;
-elseif ~isfolder('products/mat')
+elseif ~exist('products/mat', 'dir')
     mkdir products/mat;
 end
 
