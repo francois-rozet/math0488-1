@@ -25,13 +25,14 @@ c = 1e2;
 % Algorithm
 
 s = l;
-k = 0;
+k = 1;
+
+I = randi([1 n], [m 2]);
 
 tic
-while k < m
-    I = sort(randperm(n, 2));
-    i = I(1);
-    j = I(2);
+while k <= m
+    i = I(k, 1);
+    j = I(k, 2);
         
     delta = delta_f(n, D, x, i, j);
     
@@ -73,6 +74,15 @@ function p = P(beta, x)
 end
 
 function delta = delta_f(n, D, x, i, j)
+    if i == j
+        delta = 0; 
+        return;
+    elseif i > j
+        temp = i;
+        i = j;
+        j = temp;
+    end
+    
     if i == 1 && j == n
         i_m = i + 1;
         j_p = j - 1;
