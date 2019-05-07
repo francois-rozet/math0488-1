@@ -10,6 +10,7 @@ D = zeros(n);
 
 coo = tsp{:, 2:end};
 
+tic
 for i = 1:(n - 1)
     D(i, i) = Inf;
     for j = (i + 1):n
@@ -17,18 +18,35 @@ for i = 1:(n - 1)
         D(j, i) = D(i, j);
     end
 end
+toc
 
 % Nearest neighbour algorithm
-x = 2:n;
-x_nna = ones(n, 1);
+x_nna_min = 1:n;
+l_nna_min = f(D, x_nna_min);
 
-for i = 2:n
-    [~, j] = min(D(x_nna(i - 1), x));
-    x_nna(i) = x(j);
-    x = [x(1:j - 1), x(j + 1:end)];
+tic
+for i = 1:n
+    x = [1:i - 1, i + 1:n];
+    x_nna = zeros(n, 1);
+    x_nna(1) = i;
+
+    for j = 2:n
+        [~, k] = min(D(x_nna(j - 1), x));
+        x_nna(j) = x(k);
+        x = [x(1:k - 1), x(k + 1:end)];
+    end
+
+    l_nna = f(D, x_nna);
+    
+    if l_nna < l_nna_min
+        x_nna_min = x_nna;
+        l_nna_min = l_nna;
+    end
 end
+toc
 
-l_nna = f(D, x_nna);
+l_nna = l_nna_min;
+x_nna = x_nna_min;
 
 %% Save
 
