@@ -19,8 +19,8 @@ end
 % Parameters
 
 m = 1e6;
-beta = log2(n) * n / l;
-c = 1e2;
+beta = 10;
+rel_beta = beta * n / l;
 
 % Algorithm
 
@@ -30,13 +30,13 @@ k = 1;
 I = randi([1 n], [m 2]);
 
 tic
-while k <= m
+while k < m
     i = I(k, 1);
     j = I(k, 2);
         
     delta = delta_f(n, D, x, i, j);
     
-    alpha = P(beta * (1 + c * log2(k * l / s)^2), delta);
+    alpha = P(rel_beta, delta);
     
     if alpha >= 1 || rand() < alpha
         l = l + delta;
