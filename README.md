@@ -12,3 +12,7 @@ Projet réalisé sous la direction de **Pierre Geurts** dans le cadre du cours *
 * **Maxime Meurisse** - [meurissemax](https://github.com/meurissemax)
 * **François Rozet** - [Donshel](https://github.com/Donshel)
 * **Valentin Vermeylen** - [ValentinVermeylen](https://github.com/ValentinVermeylen)
+
+## Note
+
+Ce projet a reçu la note de 18/20.
