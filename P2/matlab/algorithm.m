@@ -62,7 +62,7 @@ disp(['Initial length : ' num2str(l_i)]);
 disp(['Nearest neighbour algorithm length : ' num2str(l_nna)]);
 disp(['Best length in ' num2str(m) ' iterations : ' num2str(l_min)]);
 
-% plot(tsp{x_min,2}, -tsp{x_min,3}, '-');
+% plot([tsp{x_min, 2}; tsp{x_min(1),2}], -[tsp{x_min, 3}; tsp{x_min(1),3}], '-');
 
 %% Functions
 

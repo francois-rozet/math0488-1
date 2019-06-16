@@ -33,7 +33,7 @@ for i = 1:n
     for j = 2:n
         [~, k] = min(D(x_nna(j - 1), x));
         x_nna(j) = x(k);
-        x = [x(1:k - 1), x(k + 1:end)];
+        x = x([1:k - 1, k + 1:end]);
     end
 
     l_nna = f(D, x_nna);
