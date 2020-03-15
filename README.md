@@ -10,7 +10,7 @@ Projet réalisé sous la direction de **Pierre Geurts** dans le cadre du cours *
 ## Auteurs
 
 * **Maxime Meurisse** - [meurissemax](https://github.com/meurissemax)
-* **François Rozet** - [Donshel](https://github.com/Donshel)
+* **François Rozet** - [francois-rozet](https://github.com/francois-rozet)
 * **Valentin Vermeylen** - [ValentinVermeylen](https://github.com/ValentinVermeylen)
 
 ## Note
